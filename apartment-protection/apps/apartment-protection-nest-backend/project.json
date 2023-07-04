@@ -58,6 +58,16 @@
           "codeCoverage": true
         }
       }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/apartment-protection-nest-backend/Dockerfile . -t apartment-protection-nest-backend"
+    },
+    "docker-db-restart": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "docker compose rm eco-db -s -f -v && docker compose up eco-db -d"
+      }
     }
   },
   "tags": []
