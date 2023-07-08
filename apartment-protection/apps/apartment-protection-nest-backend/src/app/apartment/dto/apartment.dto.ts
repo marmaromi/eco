@@ -8,9 +8,7 @@ import {
   IsDefined,
   IsEnum,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsNumber,
-  IsObject,
   IsString,
   ValidateIf,
   ValidateNested,
@@ -24,9 +22,9 @@ import { WindowNet } from '../../../../../../libs/enums/window-net.enum';
 import { WindowShutter } from '../../../../../../libs/enums/window-shutter.enum';
 import { Window } from '../../../../../../libs/models/window.model';
 import { AirConditionerType } from '../../../../../../libs/enums/air-conditioner-type.enum';
-import { Address } from "../../../../../../libs/models/address.model";
-import { ResidentInteraction } from "../../../../../../libs/models/resident-interaction.model";
-import { ResidentInteractionType } from "../../../../../../libs/enums/resident-interaction-type.enum";
+import { Address } from '../../../../../../libs/models/address.model';
+import { ResidentInteraction } from '../../../../../../libs/models/resident-interaction.model';
+import { ResidentInteractionType } from '../../../../../../libs/enums/resident-interaction-type.enum';
 
 export class ApartmentDto implements Omit<Apartment, 'id'> {
   @IsDate()
@@ -34,7 +32,7 @@ export class ApartmentDto implements Omit<Apartment, 'id'> {
 
   @IsDefined()
   @IsArray()
-  @ValidateNested({ each: true})
+  @ValidateNested({ each: true })
   @Type(() => AddressDto)
   address: Address;
 
@@ -43,7 +41,7 @@ export class ApartmentDto implements Omit<Apartment, 'id'> {
 
   @IsDefined()
   @IsArray()
-  @ValidateNested({ each: true})
+  @ValidateNested({ each: true })
   @Type(() => RoomDto)
   rooms: Room[];
 
@@ -82,12 +80,24 @@ class RoomDto implements Omit<Room, 'id'> {
   @Type(() => WindowDto)
   windows: WindowDto[];
 
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested({ each: true })
-  @Type(() => AirConditionerDto)
-  airConditioner: AirConditionerDto;
+  @IsNotEmpty()
+  @IsBoolean()
+  airConditionerExists: boolean;
+
+  @ValidateIf((o) => o.exists)
+  @IsNotEmpty()
+  @IsBoolean()
+  airConditionerExistsWorking?: boolean;
+
+  @ValidateIf((o) => o.exists)
+  @IsNotEmpty()
+  @IsNumber()
+  airConditionerExistsAge?: number;
+
+  @ValidateIf((o) => o.exists)
+  @IsNotEmpty()
+  @IsEnum(AirConditionerType)
+  airConditionerExistsType?: AirConditionerType;
 
   @IsNotEmpty()
   @IsBoolean()
@@ -164,27 +174,6 @@ class WindowDto implements Omit<Window, 'id'> {
   @IsNotEmpty()
   @IsEnum(WindowShutter)
   shutter: WindowShutter;
-}
-
-class AirConditionerDto {
-  @IsNotEmpty()
-  @IsBoolean()
-  exists: boolean;
-
-  @ValidateIf((o) => o.exists)
-  @IsNotEmpty()
-  @IsBoolean()
-  working?: boolean;
-
-  @ValidateIf((o) => o.exists)
-  @IsNotEmpty()
-  @IsNumber()
-  age?: number;
-
-  @ValidateIf((o) => o.exists)
-  @IsNotEmpty()
-  @IsEnum(AirConditionerType)
-  type?: AirConditionerType;
 }
 
 class ResidentDto implements Omit<Resident, 'id'> {

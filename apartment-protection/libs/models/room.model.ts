@@ -1,11 +1,14 @@
 import { Window } from "./window.model";
-import { AirConditioner } from "./air-conditioner.model";
+import { AirConditionerType } from "../enums/air-conditioner-type.enum";
 
 export interface Room {
   id: number;
   roomNumber: number;
   windows: Window[];
-  airConditioner: AirConditioner;
+  airConditionerExists: boolean;
+  airConditionerWorking?: boolean;
+  airConditionerAge?: number;
+  airConditionerType?: AirConditionerType;
   dress: boolean;
   dressComment: string;
   comments: string[];
