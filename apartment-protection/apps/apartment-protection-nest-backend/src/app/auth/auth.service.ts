@@ -2,9 +2,9 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
-import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { sendError } from "../error-handling";
 
 @Injectable()
 export class AuthService {
@@ -29,12 +29,7 @@ export class AuthService {
 
       return this.signToken(user.id, user.email);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Credentials already exists');
-        }
-      }
-      throw error;
+      sendError(error);
     }
   }
 

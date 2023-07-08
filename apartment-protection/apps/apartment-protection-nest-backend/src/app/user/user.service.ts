@@ -1,22 +1,23 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from "./dto";
 import { AuthDto } from '../auth/dto';
 import * as argon from 'argon2';
+import { sendError } from "../error-handling";
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async updateUserDetails(dto: UserDto, userEmail: string) {
-    try {
+    updateUserDetails: try {
       const existingEmail = await this.prisma.user.findUnique({
         where: { email: dto.email },
       });
 
       if (existingEmail && existingEmail.email !== userEmail) {
-        throw new ForbiddenException('Email already exists');
+        sendError(new ForbiddenException('Email already exists'));
+        break updateUserDetails;
       }
 
       const data = {};
@@ -36,12 +37,7 @@ export class UserService {
       delete updatedUser.password;
       return updatedUser;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Something went wrong');
-        }
-      }
-      throw error;
+      sendError(error);
     }
   }
 
@@ -62,12 +58,7 @@ export class UserService {
       delete updatedUser.password;
       return updatedUser;
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('Something went wrong');
-        }
-      }
-      throw error;
+      sendError(error);
     }
   }
 }
