@@ -1,0 +1,16 @@
+export enum WindowShutter {
+  none = 'none',
+  wingOnWing = 'wingOnWing',
+  slideToPocket = 'slideToPocket',
+  hinge = 'hinge',
+  manualRollup = 'manualRollup',
+  motorizedRollup = 'motorizedRollup',
+  level8 = 'level8',
+  level5 = 'level5',
+  regular = 'regular',
+  glass = 'glass',
+  attachedTrack = 'attachedTrack',
+  separateTrack = 'separateTrack',
+  closeToWindow = 'closeToWindow',
+  other = 'other',
+}

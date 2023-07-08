@@ -18,21 +18,80 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role      String   @default("USER")
 
   Apartments Apartment[]
-
-  // @@map("users")
 }
 
 model Apartment {
-  id        String   @id @default(uuid())
-  name      String
-  address   String
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  city            String
+  street          String
+  streetNumber    String
+  floorNumber     Int
+  apartmentNumber Int
+
+  Room     Room[]
+  Resident Resident[]
+
   userId String
   user   User   @relation(fields: [userId], references: [id])
+}
 
-  // @@map("apartments")
+model Room {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roomNumber            Int
+  airConditionerExists  Boolean
+  airConditionerWorking String
+  airConditionerAge     Int
+  airConditionerType    Int
+  dressExists           Boolean
+  dressType             String
+  comments              String[]
+  interruptions         String[]
+
+  windows Window[]
+
+  apartmentId Int
+  apartment   Apartment @relation(fields: [apartmentId], references: [id])
+}
+
+model Window {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  windowNumber   Int
+  windowType     String
+  wingsAmount    Int
+  width          Int
+  height         Int
+  thickness      Int
+  uk             Int
+  color          String
+  glaze          String
+  windowMaterial String
+  bars           Boolean
+  barsType       String
+  net            String
+  shutter        String
+
+  room   Room @relation(fields: [roomId], references: [id])
+  roomId Int
+}
+
+model Resident {
+  id              Int      @id @default(autoincrement())
+  interactionType String
+  date            DateTime
+  content         String
+
+  apartmentId Int
+  apartment   Apartment @relation(fields: [apartmentId], references: [id])
 }
