@@ -19,8 +19,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      String   @default("USER")
-
-  Apartments Apartment[]
 }
 
 model Apartment {
@@ -33,12 +31,32 @@ model Apartment {
   streetNumber    String
   floorNumber     Int
   apartmentNumber Int
+  split           Boolean
+  resident        Resident[]
+  rooms           Room[]
+}
 
-  Room     Room[]
-  Resident Resident[]
+model Resident {
+  id                Int                    @id @default(autoincrement())
+  firstName         String
+  lastName          String
+  mobilePhoneNumber String
+  homePhoneNumber   String?
+  comments          String[]
+  interactions      ResidentInteractions[]
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  apartmentId Int
+  apartment   Apartment @relation(fields: [apartmentId], references: [id])
+}
+
+model ResidentInteractions {
+  id              Int      @id @default(autoincrement())
+  interactionType String
+  date            DateTime
+  content         String
+
+  resident   Resident? @relation(fields: [residentId], references: [id])
+  residentId Int?
 }
 
 model Room {
@@ -48,15 +66,14 @@ model Room {
 
   roomNumber            Int
   airConditionerExists  Boolean
-  airConditionerWorking String
+  airConditionerWorking Boolean
   airConditionerAge     Int
-  airConditionerType    Int
+  airConditionerType    String
   dressExists           Boolean
-  dressType             String
+  dressComment          String
   comments              String[]
   interruptions         String[]
-
-  windows Window[]
+  windows               Window[]
 
   apartmentId Int
   apartment   Apartment @relation(fields: [apartmentId], references: [id])
@@ -67,31 +84,21 @@ model Window {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  windowNumber   Int
-  windowType     String
-  wingsAmount    Int
-  width          Int
-  height         Int
-  thickness      Int
-  uk             Int
-  color          String
-  glaze          String
-  windowMaterial String
-  bars           Boolean
-  barsType       String
-  net            String
-  shutter        String
+  windowNumber Int
+  windowType   String
+  wingsAmount  Int
+  width        Int
+  height       Int
+  thickness    Int
+  uk           Int
+  color        String
+  glaze        String
+  material     String
+  bars         Boolean
+  barsType     String
+  net          String
+  shutter      String
 
   room   Room @relation(fields: [roomId], references: [id])
   roomId Int
-}
-
-model Resident {
-  id              Int      @id @default(autoincrement())
-  interactionType String
-  date            DateTime
-  content         String
-
-  apartmentId Int
-  apartment   Apartment @relation(fields: [apartmentId], references: [id])
 }

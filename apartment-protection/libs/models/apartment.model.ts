@@ -4,7 +4,7 @@ import { Address } from './address.model';
 
 export interface Apartment {
   id: number;
-  createdAt: Date;
+  // createdAt: Date;
   address: Address;
   split: boolean;
   rooms: Room[];

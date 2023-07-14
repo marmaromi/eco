@@ -9,9 +9,9 @@ export interface Room {
   airConditionerWorking?: boolean;
   airConditionerAge?: number;
   airConditionerType?: AirConditionerType;
-  dress: boolean;
+  dressExists: boolean;
   dressComment: string;
   comments: string[];
   interruptions: string[];
-  roomSketch: string;
+  roomSketch?: string;
 }

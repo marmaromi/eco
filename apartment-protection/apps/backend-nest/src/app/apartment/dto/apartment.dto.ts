@@ -9,6 +9,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   ValidateIf,
   ValidateNested,
@@ -27,11 +28,9 @@ import { ResidentInteraction } from '../../../../../../libs/models/resident-inte
 import { ResidentInteractionType } from '../../../../../../libs/enums/resident-interaction-type.enum';
 
 export class ApartmentDto implements Omit<Apartment, 'id'> {
-  @IsDate()
-  createdAt: Date;
+  // @IsDate()
+  // createdAt: Date;
 
-  @IsDefined()
-  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AddressDto)
   address: Address;
@@ -87,23 +86,23 @@ class RoomDto implements Omit<Room, 'id'> {
   @ValidateIf((o) => o.exists)
   @IsNotEmpty()
   @IsBoolean()
-  airConditionerExistsWorking?: boolean;
+  airConditionerWorking?: boolean;
 
   @ValidateIf((o) => o.exists)
   @IsNotEmpty()
   @IsNumber()
-  airConditionerExistsAge?: number;
+  airConditionerAge?: number;
 
   @ValidateIf((o) => o.exists)
   @IsNotEmpty()
   @IsEnum(AirConditionerType)
-  airConditionerExistsType?: AirConditionerType;
+  airConditionerType?: AirConditionerType;
 
   @IsNotEmpty()
   @IsBoolean()
-  dress: boolean;
+  dressExists: boolean;
 
-  @ValidateIf((o) => o.dress)
+  @ValidateIf((o) => o.dressExists)
   @IsString()
   dressComment: string;
 
@@ -113,6 +112,7 @@ class RoomDto implements Omit<Room, 'id'> {
   @IsArray()
   interruptions: string[];
 
+  @IsOptional()
   @IsString()
   roomSketch: string;
 }

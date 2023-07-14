@@ -44,3 +44,18 @@ export class AuthDto
   })
   lastName?: string;
 }
+
+export class PasswordDto implements Pick<User, 'password'> {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(30)
+  @Matches(/^(?=.*[A-Z]).{1,}$/, { message: 'Uppercase letter required' })
+  @Matches(/^(?=.*[a-z]).{1,}$/, { message: 'Lowercase letter required' })
+  @Matches(/^(?=.*\d).{1,}$/, { message: 'Number required' })
+  @Matches(/^(?=.*[^\da-zA-Z]).{1,}$/, {
+    message: 'Special character required',
+  })
+  @NotContains(' ')
+  password: string;
+}
